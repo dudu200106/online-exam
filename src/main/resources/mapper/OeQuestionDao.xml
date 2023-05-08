@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onlineexam.dao.OeQuestionDao">
+
+    <resultMap type="com.onlineexam.entity.OeQuestion" id="OeQuestionMap">
+        <result property="qid" column="qid" jdbcType="INTEGER"/>
+        <result property="eid" column="eid" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="optA" column="opt_a" jdbcType="VARCHAR"/>
+        <result property="optB" column="opt_b" jdbcType="VARCHAR"/>
+        <result property="optC" column="opt_c" jdbcType="VARCHAR"/>
+        <result property="optD" column="opt_d" jdbcType="VARCHAR"/>
+        <result property="keyOpt" column="key_opt" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="qid" useGeneratedKeys="true">
+        insert into online_exam.oe_question(eid, title, opt_a, opt_b, opt_c, opt_d, key_opt, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.eid}, #{entity.title}, #{entity.optA}, #{entity.optB}, #{entity.optC}, #{entity.optD}, #{entity.keyOpt}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="qid" useGeneratedKeys="true">
+        insert into online_exam.oe_question(eid, title, opt_a, opt_b, opt_c, opt_d, key_opt, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.eid}, #{entity.title}, #{entity.optA}, #{entity.optB}, #{entity.optC}, #{entity.optD}, #{entity.keyOpt}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+         eid = values(eid) , title = values(title) , opt_a = values(opt_a) , opt_b = values(opt_b) , opt_c = values(opt_c) , opt_d = values(opt_d) , key_opt = values(key_opt) , create_time = values(create_time) , update_time = values(update_time)     </insert>
+
+</mapper>
+
